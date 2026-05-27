@@ -7,10 +7,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <!-- <div class="container"> -->
         <h1>Weather App</h1>
-        <input type="text" name="city" id="city" placeholder="enter your city">
+        <div class="searchbox">
+            <input type="text" id="city" placeholder="enter your city">
+            <div class="suggestions"></div>
+        </div>
         <button id="search">Search</button>
-    </div>
+
+        <div id="result"></div>
+    <!-- </div> -->
+
+    <script src="script.js"></script>
 </body>
 </html>
