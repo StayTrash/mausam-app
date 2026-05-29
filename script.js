@@ -72,6 +72,7 @@ const cityInput = document.getElementById("cityInput");
 const result = document.getElementById("result");
 const searchBtn = document.getElementById("search-btn");
 const locationBtn = document.getElementById("locationBtn");
+const historyDiv = document.getElementById("history");
 
 const apiKey = "0ee3c341986c4c7e4f2ad97a4dcb8719";
 
@@ -101,6 +102,26 @@ const handler = async () => {
         }
 
         const data = await response.json();
+
+        let history =
+            JSON.parse(
+                localStorage.getItem("history")
+            ) || [];
+
+        history = history.filter(
+            item => item !== data.name
+        );
+
+        history.unshift(data.name);
+
+        history = history.slice(0, 5);
+
+        localStorage.setItem(
+            "history",
+            JSON.stringify(history)
+        );
+
+        renderHistory();
 
         const lat = data.coord.lat;
         const lon = data.coord.lon;
@@ -178,6 +199,23 @@ cityInput.addEventListener("input", async () => {
     }, 400);
 });
 
+const renderHistory = () => {
+    const history = JSON.parse(localStorage.getItem("history")) || [];
+
+    historyDiv.innerHTML = "";
+
+    history.forEach(city => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerText = city;
+
+        div.addEventListener("click", () => {
+            cityInput.value = city;
+            handler();
+        });
+        historyDiv.appendChild(div);
+    });
+}
 
 const fetchWeatherByCoords = async (lat, lon) => {
 
@@ -231,3 +269,5 @@ locationBtn.addEventListener("click", () => {
         result.innerHTML = "Location permission denied"
     });
 });
+
+renderHistory();
