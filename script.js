@@ -76,36 +76,36 @@ const apiKey = "0ee3c341986c4c7e4f2ad97a4dcb8719";
 
 const handler = async () => {
     const city = cityInput.value;
-    
+
     if (!city) {
         result.innerHTML = "Please enter your city";
         return;
     }
-    
+
     console.log(city);
 
     result.innerHTML = `
         <div class="loader"></div>
         <p>Loading weather...</p>
         `;
-    
+
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    
+
     try {
         const response = await fetch(url);
-        
+
         if (!response.ok) {
             result.innerHTML = "City not found";
             return;
         }
-        
+
         const data = await response.json();
 
         const lat = data.coord.lat;
         const lon = data.coord.lon;
         const icon = data.weather[0].icon;
         const iconurl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
-        
+
         result.innerHTML = `
         <h1>City: ${data.name}</h1>
         <p>Temperature: <b>${data.main.temp}</b></p>
@@ -115,8 +115,8 @@ const handler = async () => {
         <p>Wind: ${data.wind.speed} km/h</p>
         <p>Latitute: ${lat}, Longitute: ${lon}</p>
         `
-        
-    } catch(err) {
+
+    } catch (err) {
         result.innerHTML = "Something went wrong";
         console.log(err);
     }
@@ -134,37 +134,40 @@ cityInput.addEventListener("keypress", (e) => {
     }
 })
 
-
-
+let debounceTimer;
 
 cityInput.addEventListener("input", async () => {
-    const city = cityInput.value.trim();
+    clearTimeout(debounceTimer);
 
-    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
+    debounceTimer = setTimeout(async () => {
+        const city = cityInput.value.trim();
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
 
-        // console.log(data);
-        suggestions.innerHTML = "";
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-        data.forEach(place => {
-            const div = document.createElement("div");
-            
-            div.innerText = `
+            // console.log(data);
+            suggestions.innerHTML = "";
+
+            data.forEach(place => {
+                const div = document.createElement("div");
+
+                div.innerText = `
                 ${place.name}, ${place.state || ""}, ${place.country}
             `
 
-            div.addEventListener("click", () => {
-                cityInput.value = place.name;
-                handler();
-                suggestions.innerHTML = "";
-            })
+                div.addEventListener("click", () => {
+                    cityInput.value = place.name;
+                    handler();
+                    suggestions.innerHTML = "";
+                })
 
-            suggestions.appendChild(div);
-        });
-    } catch (err) {
-        console.log(err);
-    }
+                suggestions.appendChild(div);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }, 400);
 });
