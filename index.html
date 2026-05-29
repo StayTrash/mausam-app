@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mausam App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mausam Vibhag app</title>
 </head>
 <body>
-    <!-- <div class="container"> -->
-        <h1>Weather App</h1>
-        <div class="searchbox">
-            <input type="text" id="city" placeholder="enter your city">
-            <div id="suggestions"></div>
-        </div>
-        <button id="search">Search</button>
+    <div class="container">
+        <input type="text" id="cityInput" placeholder="enter your city" autocomplete="off">
+        <button id="search-btn">Search</button>
 
-        <div id="result"></div>
-    <!-- </div> -->
+        <div id="suggestion-items"></div>
+    </div>
+
+    <div id="result"></div>
 
     <script src="script.js"></script>
 </body>
