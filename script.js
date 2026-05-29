@@ -83,6 +83,11 @@ const handler = async () => {
     }
     
     console.log(city);
+
+    result.innerHTML = `
+        <div class="loader"></div>
+        <p>Loading weather...</p>
+        `;
     
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     
