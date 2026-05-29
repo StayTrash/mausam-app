@@ -1,11 +1,11 @@
-/* *{
+*{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
 body{
-    font-family:Arial, sans-serif;
+    font-family:Arial;
     background:linear-gradient(135deg,#4facfe,#00f2fe);
     height:100vh;
     display:flex;
@@ -14,20 +14,12 @@ body{
 }
 
 .container{
-    background:white;
-    padding:30px;
-    border-radius:20px;
     width:350px;
+    background:white;
+    padding:25px;
+    border-radius:20px;
     text-align:center;
     box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-h1{
-    margin-bottom:20px;
-}
-
-.search-box{
-    position:relative;
 }
 
 input{
@@ -36,45 +28,33 @@ input{
     border:2px solid #ccc;
     border-radius:10px;
     outline:none;
-    font-size:16px;
+    margin-top:10px;
 }
 
 button{
-    margin-top:15px;
-    padding:12px 25px;
+    margin-top:10px;
+    padding:10px 20px;
     border:none;
     border-radius:10px;
     background:#4facfe;
     color:white;
-    font-size:16px;
     cursor:pointer;
-    transition:0.3s;
 }
 
 button:hover{
     background:#2196f3;
 }
 
-#weatherResult{
+#result{
     margin-top:20px;
 }
 
-#weatherResult h2{
-    margin-bottom:10px;
-}
-
-#weatherResult p{
-    margin:8px 0;
-}
-
-#suggestions{
-    position:absolute;
-    width:100%;
+#suggestion-items{
+    margin-top:5px;
     background:white;
     border-radius:10px;
     overflow:hidden;
-    box-shadow:0 5px 15px rgba(0,0,0,0.15);
-    z-index:100;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
 }
 
 .suggestion-item{
@@ -83,13 +63,10 @@ button:hover{
     cursor:pointer;
     border-bottom:1px solid #eee;
 }
-*/
-/* .suggestion-item:hover{
-    cursor: pointer;
+
+.suggestion-item:hover{
     background:#f2f2f2;
-}  */
-
-
+}
 
 .loader{
     width:50px;
@@ -108,4 +85,47 @@ button:hover{
     to{
         transform:rotate(360deg);
     }
+}
+
+#historyBox{
+    margin-top:20px;
+}
+
+.history-item{
+    padding:8px;
+    margin:5px 0;
+    background:#f2f2f2;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.history-item:hover{
+    background:#ddd;
+}
+
+.dark{
+    background:#121212;
+    color:white;
+}
+
+.dark .container{
+    background:#1f1f1f;
+    color:white;
+}
+
+.dark input{
+    background:#333;
+    color:white;
+    border-color:#555;
+}
+
+.dark .history-item,
+.dark .suggestion-item{
+    background:#333;
+    color:white;
+}
+
+.dark .history-item:hover,
+.dark .suggestion-item:hover{
+    background:#444;
 }
