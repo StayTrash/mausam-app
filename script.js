@@ -71,11 +71,12 @@
 const cityInput = document.getElementById("cityInput");
 const result = document.getElementById("result");
 const searchBtn = document.getElementById("search-btn");
+const locationBtn = document.getElementById("locationBtn");
 
 const apiKey = "0ee3c341986c4c7e4f2ad97a4dcb8719";
 
 const handler = async () => {
-    const city = cityInput.value;
+    const city = cityInput.value.trim();
 
     if (!city) {
         result.innerHTML = "Please enter your city";
@@ -125,14 +126,14 @@ const handler = async () => {
 searchBtn.addEventListener("click", handler);
 const suggestions = document.getElementById("suggestion-items");
 
-
 cityInput.addEventListener("keypress", (e) => {
     if (e.key == "Enter") {
         handler();
         cityInput.value = "";
         suggestions.innerHTML = "";
     }
-})
+});
+
 
 let debounceTimer;
 
@@ -141,6 +142,11 @@ cityInput.addEventListener("input", async () => {
 
     debounceTimer = setTimeout(async () => {
         const city = cityInput.value.trim();
+
+        if (!city) {
+            suggestions.innerHTML = "";
+            return;
+        }
 
         const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
 
@@ -170,4 +176,58 @@ cityInput.addEventListener("input", async () => {
             console.log(err);
         }
     }, 400);
+});
+
+
+const fetchWeatherByCoords = async (lat, lon) => {
+
+    result.innerHTML = `
+        <div class="loader"></div>
+        <p>Loading weather...</p>
+        `;
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            result.innerHTML = "City not found";
+            return;
+        }
+
+        const data = await response.json();
+
+        // const lat = data.coord.lat;
+        // const lon = data.coord.lon;
+        const icon = data.weather[0].icon;
+        const iconurl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+
+        result.innerHTML = `
+            <h1>City: ${data.name}</h1>
+            <p>Temperature: <b>${data.main.temp}</b></p>
+            <img src="${iconurl}" alt="wather-icon">
+            <p>Weather: ${data.weather[0].main}</p>
+            <p>Humidity: ${data.main.humidity}%</p>
+            <p>Wind: ${data.wind.speed} km/h</p>
+            <p>Latitude: ${data.coord.lat}</p>
+            <p>Longitude: ${data.coord.lon}</p>
+        `
+
+    } catch (err) {
+        result.innerHTML = "Something went wrong";
+        console.log(err);
+    }
+}
+
+
+locationBtn.addEventListener("click", () => {
+    navigator.geolocation.getCurrentPosition(position => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        fetchWeatherByCoords(lat, lon);
+    }, error => {
+        result.innerHTML = "Location permission denied"
+    });
 });
